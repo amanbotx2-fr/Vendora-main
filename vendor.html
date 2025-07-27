@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendora - Street Vendor Registration</title>
+    <link rel="stylesheet" href="vendor.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Vendora 🎉</h1>
+            <p>Let's set up your street vendor profile and connect you with local suppliers</p>
+        </div>
+
+        <div class="main-content">
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <span>Welcome</span>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <span>Business Info</span>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <span>Products</span>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <span>Verification</span>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-number">5</div>
+                    <span>Dashboard</span>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+            </div>
+
+            <div class="content-area">
+                <!-- Step 1: Welcome -->
+                <div class="form-section active" id="step1">
+                    <div class="welcome-section">
+                        <div class="welcome-icon">🛒</div>
+                        <h2>Great choice joining Vendora!</h2>
+                        <p>You're about to connect with verified local suppliers who can provide fresh, quality products at competitive prices.</p>
+                        
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">📍</div>
+                                <h3>Local Suppliers</h3>
+                                <p>Find suppliers within 5km of your location</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">💰</div>
+                                <h3>Better Prices</h3>
+                                <p>Direct sourcing means better margins for you</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">✅</div>
+                                <h3>Verified Quality</h3>
+                                <p>All suppliers are verified and rated</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">📱</div>
+                                <h3>Easy Ordering</h3>
+                                <p>Order via WhatsApp or phone calls</p>
+                            </div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button class="btn btn-secondary" onclick="goBack()">← Back to Home</button>
+                            <button class="btn btn-primary" onclick="nextStep()">Get Started →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Business Information -->
+                <div class="form-section" id="step2">
+                    <h2>Tell us about your business</h2>
+                    <p>This information helps us connect you with the right suppliers in your area.</p>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vendorName">Your Name *</label>
+                            <input type="text" id="vendorName" name="vendorName" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="businessName">Business/Stall Name</label>
+                            <input type="text" id="businessName" name="businessName" placeholder="e.g., Raj's Fresh Fruits">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+91 9876543210" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="whatsapp">WhatsApp Number</label>
+                            <input type="tel" id="whatsapp" name="whatsapp" placeholder="+91 9876543210">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Business Location *</label>
+                        <input type="text" id="location" name="location" placeholder="Area, City, State" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="operatingHours">Operating Hours</label>
+                            <select id="operatingHours" name="operatingHours">
+                                <option value="">Select hours</option>
+                                <option value="6am-2pm">6 AM - 2 PM</option>
+                                <option value="7am-3pm">7 AM - 3 PM</option>
+                                <option value="8am-6pm">8 AM - 6 PM</option>
+                                <option value="5pm-11pm">5 PM - 11 PM</option>
+                                <option value="6pm-12am">6 PM - 12 AM</option>
+                                <option value="custom">Custom Hours</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="experience">Years in Business</label>
+                            <select id="experience" name="experience">
+                                <option value="">Select experience</option>
+                                <option value="less-than-1">Less than 1 year</option>
+                                <option value="1-3">1-3 years</option>
+                                <option value="3-5">3-5 years</option>
+                                <option value="5-10">5-10 years</option>
+                                <option value="more-than-10">More than 10 years</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Products -->
+                <div class="form-section" id="step3">
+                    <h2>What products do you sell?</h2>
+                    <p>Select all the products you sell. This helps us find the right suppliers for you.</p>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item" onclick="toggleProduct(this)">
+                            <input type="checkbox" name="products" value="vegetables">
+                            <span>🥕 Fresh Vegetables</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleProduct(this)">
+                            <input type="checkbox" name="products" value="fruits">
+                            <span>🍎 Seasonal Fruits</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleProduct(this)">
+                            <input type="checkbox" name="products" value="spices">
+                            <span>🌶️ Spices & Herbs</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleProduct(this)">
+                            <input type="checkbox" name="products" value="grains">
+                            <span>🌾 Grains & Pulses</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleProduct(this)">
+                            <input type="checkbox" name="products" value="dairy">
+                            <span>🥛 Dairy Products</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleProduct(this)">
+                            <input type="checkbox" name="products" value="snacks">
+                            <span>🥜 Snacks & Beverages</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleProduct(this)">
+                            <input type="checkbox" name="products" value="street-food">
+                            <span>🍢 Street Food Items</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleProduct(this)">
+                            <input type="checkbox" name="products" value="household">
+                            <span>🧴 Household Items</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="specificProducts">Specific Products (Optional)</label>
+                        <textarea id="specificProducts" name="specificProducts" rows="3" placeholder="e.g., Tomatoes, Onions, Potatoes, Bananas, Apples..."></textarea>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Verification -->
+                <div class="form-section" id="step4">
+                    <h2>Verify your business</h2>
+                    <p>Upload photos to verify your business. This builds trust with suppliers.</p>
+                    
+                    <div class="form-group">
+                        <label>Business License (Optional)</label>
+                        <div class="upload-area" onclick="document.getElementById('license').click()">
+                            <div class="upload-icon">📄</div>
+                            <h3>Upload Business License</h3>
+                            <p>Trade license, GST certificate, or any business registration document</p>
+                            <input type="file" id="license" name="license" accept="image/*,.pdf" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Business Photos *</label>
+                        <div class="upload-area" onclick="document.getElementById('photos').click()">
+                            <div class="upload-icon">📸</div>
+                            <h3>Upload Business Photos</h3>
+                            <p>Photos of your stall, cart, or shop. Multiple photos accepted.</p>
+                            <input type="file" id="photos" name="photos" accept="image/*" multiple style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="preferredContact">Preferred Contact Method</label>
+                        <select id="preferredContact" name="preferredContact">
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="phone">Phone Call</option>
+                            <option value="sms">SMS</option>
+                            <option value="app">In-App Messages</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextStep()">Complete Registration →</button>
+                    </div>
+                </div>
+
+                <!-- Step 5: Dashboard Preview -->
+                <div class="form-section" id="step5">
+                    <div class="welcome-section">
+                        <div class="welcome-icon">🎉</div>
+                        <h2>Welcome to your dashboard!</h2>
+                        <p>Your profile is being verified. Meanwhile, here are some suppliers near your location:</p>
+                        
+                        <div class="dashboard-preview">
+                            <h3>📍 Suppliers Near You</h3>
+                            
+                            <div class="supplier-card">
+                                <div class="supplier-info">
+                                    <div class="supplier-avatar">RS</div>
+                                    <div class="supplier-details">
+                                        <h4>Raj Sabzi Mandi</h4>
+                                        <p>Fresh Vegetables • 2.3 km away</p>
+                                        <div class="rating">⭐⭐⭐⭐⭐ (4.8)</div>
+                                    </div>
+                                </div>
+                                <div class="supplier-price">
+                                    <div class="price">₹25/kg</div>
+                                    <p>Tomatoes</p>
+                                    <button class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">Contact</button>
+                                </div>
+                            </div>
+                            
+                            <div class="supplier-card">
+                                <div class="supplier-info">
+                                    <div class="supplier-avatar">MF</div>
+                                    <div class="supplier-details">
+                                        <h4>Mumbai Fresh Fruits</h4>
+                                        <p>Seasonal Fruits • 1.8 km away</p>
+                                        <div class="rating">⭐⭐⭐⭐⭐ (4.6)</div>
+                                    </div>
+                                </div>
+                                <div class="supplier-price">
+                                    <div class="price">₹80/kg</div>
+                                    <p>Bananas</p>
+                                    <button class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">Contact</button>
+                                </div>
+                            </div>
+                            
+                            <div class="supplier-card">
+                                <div class="supplier-info">
+                                    <div class="supplier-avatar">PS</div>
+                                    <div class="supplier-details">
+                                        <h4>Patel Spice Center</h4>
+                                        <p>Spices & Masalas • 3.1 km away</p>
+                                        <div class="rating">⭐⭐⭐⭐⭐ (4.9)</div>
+                                    </div>
+                                </div>
+                                <div class="supplier-price">
+                                    <div class="price">₹45/kg</div>
+                                    <p>Red Chili</p>
+                                    <button class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">Contact</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button class="btn btn-secondary" onclick="goToApp()">Explore More Suppliers</button>
+                            <button class="btn btn-primary" onclick="goToApp()">Start Shopping →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vendor.js"></script>
+</body>
+</html>

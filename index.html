@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendora - Connecting Street Vendors with Local Suppliers</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Vendora</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#how-it-works">How it Works</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="profile-nav" id="profileNav" style="display:none;">
+                <span class="profile-name" id="profileName"></span>
+                <button class="profile-icon" id="profileIcon" aria-label="Profile">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M2 20c0-4 8-6 10-6s10 2 10 6v2H2v-2z"/></svg>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button id="logoutBtn">Logout</button>
+                </div>
+            </div>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Connect. Trade. Grow.</h1>
+                <p>Bridge the gap between street vendors and local raw material suppliers. Find fresh ingredients, build lasting partnerships, and grow your business together.</p>
+                
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search for products, suppliers, or vendors...">
+                    <button class="search-btn">🔍</button>
+                </div>
+
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary" onclick="showAlert('vendor')">I'm a Street Vendor</a>
+                    <a href="#" class="btn btn-secondary" onclick="showAlert('supplier')">I'm a Supplier</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title fade-in">How It Works</h2>
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-icon">📱</div>
+                    <h3>1. Sign Up</h3>
+                    <p>Create your profile as a vendor or supplier. Verify your business details for trusted connections.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-icon">🔍</div>
+                    <h3>2. Search & Connect</h3>
+                    <p>Find local suppliers or vendors based on location, products, and ratings. Send connection requests instantly.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-icon">💬</div>
+                    <h3>3. Negotiate & Order</h3>
+                    <p>Chat directly, negotiate prices, and place orders. Schedule deliveries that work for both parties.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-icon">🤝</div>
+                    <h3>4. Build Relationships</h3>
+                    <p>Rate your experience, build long-term partnerships, and grow your business network.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat">
+                    <h3 id="vendors-count">500+</h3>
+                    <p>Active Vendors</p>
+                </div>
+                <div class="stat">
+                    <h3 id="suppliers-count">200+</h3>
+                    <p>Verified Suppliers</p>
+                </div>
+                <div class="stat">
+                    <h3 id="connections-count">2,500+</h3>
+                    <p>Successful Connections</p>
+                </div>
+                <div class="stat">
+                    <h3 id="cities-count">15+</h3>
+                    <p>Cities Covered</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+                            <h2 class="section-title fade-in">Why Choose Vendora?</h2>
+            <div class="features-grid">
+                <div class="feature fade-in">
+                    <div class="feature-icon">📍</div>
+                    <div class="feature-content">
+                        <h3>Location-Based Matching</h3>
+                        <p>Find suppliers and vendors in your immediate area to reduce transportation costs and ensure fresh deliveries.</p>
+                    </div>
+                </div>
+                <div class="feature fade-in">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-content">
+                        <h3>Verified Users</h3>
+                        <p>All vendors and suppliers go through our verification process to ensure legitimate business partnerships.</p>
+                    </div>
+                </div>
+                <div class="feature fade-in">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-content">
+                        <h3>Transparent Pricing</h3>
+                        <p>Compare prices from multiple suppliers, negotiate directly, and get the best deals for your business.</p>
+                    </div>
+                </div>
+                <div class="feature fade-in">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-content">
+                        <h3>Mobile-First Design</h3>
+                        <p>Optimized for smartphones, making it easy to connect and trade on the go from anywhere.</p>
+                    </div>
+                </div>
+                <div class="feature fade-in">
+                    <div class="feature-icon">🚚</div>
+                    <div class="feature-content">
+                        <h3>Delivery Scheduling</h3>
+                        <p>Coordinate deliveries that work for both parties, with real-time tracking and updates.</p>
+                    </div>
+                </div>
+                <div class="feature fade-in">
+                    <div class="feature-icon">⭐</div>
+                    <div class="feature-content">
+                        <h3>Rating System</h3>
+                        <p>Build trust through our comprehensive rating and review system for both vendors and suppliers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="categories">
+        <div class="container">
+            <h2 class="section-title fade-in">Popular Categories</h2>
+            <div class="categories-grid">
+                <div class="category fade-in" onclick="categoryClick('vegetables')">
+                    <div class="category-icon">🥕</div>
+                    <h3>Fresh Vegetables</h3>
+                </div>
+                <div class="category fade-in" onclick="categoryClick('fruits')">
+                    <div class="category-icon">🍎</div>
+                    <h3>Seasonal Fruits</h3>
+                </div>
+                <div class="category fade-in" onclick="categoryClick('spices')">
+                    <div class="category-icon">🌶️</div>
+                    <h3>Spices & Herbs</h3>
+                </div>
+                <div class="category fade-in" onclick="categoryClick('grains')">
+                    <div class="category-icon">🌾</div>
+                    <h3>Grains & Pulses</h3>
+                </div>
+                <div class="category fade-in" onclick="categoryClick('dairy')">
+                    <div class="category-icon">🥛</div>
+                    <h3>Dairy Products</h3>
+                </div>
+                <div class="category fade-in" onclick="categoryClick('snacks')">
+                    <div class="category-icon">🥜</div>
+                    <h3>Snacks & Beverages</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title fade-in">What Our Users Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial fade-in">
+                    <p>"VendorConnect has transformed my business! I can now source fresh vegetables directly from local farmers at better prices. My customers love the quality."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">R</div>
+                        <div>
+                            <strong>Raj Kumar</strong>
+                            <p>Street Vendor, Delhi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial fade-in">
+                    <p>"As a spice supplier, this platform helped me connect with dozens of vendors in my area. The direct communication feature makes negotiations so much easier."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">P</div>
+                        <div>
+                            <strong>Priya Sharma</strong>
+                            <p>Spice Supplier, Mumbai</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial fade-in">
+                    <p>"The verification system gives me confidence when dealing with new suppliers. I've built lasting relationships that have helped grow my fruit cart business."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div>
+                            <strong>Mohammed Ali</strong>
+                            <p>Fruit Vendor, Bangalore</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Vendora</h4>
+                    <p>Bridging the gap between street vendors and suppliers across India.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#how-it-works">How it Works</a>
+                    <a href="#features">Features</a>
+                    <a href="#categories">Categories</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <p>📧 support@vendora.com</p>
+                    <p>📞 +91 00000-00000</p>
+                    <p>📍 Mumbai, India</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #4a7c59; padding-top: 20px; margin-top: 20px;">
+                <p>&copy; 2025 Vendora. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="index.js"></script>
+</body>
+</html>

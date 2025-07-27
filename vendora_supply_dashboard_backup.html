@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendora - Supplier Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: #232323;
+            padding: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #333;
+        }
+
+        .logo h1 {
+            color: #8371fd;
+            font-size: 1.8rem;
+        }
+
+        .logo p {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #bbb;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            gap: 12px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #8371fd;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.full-width {
+            margin-left: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #232323;
+            border-radius: 15px;
+        }
+
+        .header-left h1 {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .header-left p {
+            color: #bbb;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: #333;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: #333;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #232323;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8371fd;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #fff;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #8371fd;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(131, 113, 253, 0.4);
+        }
+
+        .btn-secondary {
+            background: #444;
+            color: #fff;
+        }
+
+        .btn-success {
+            background: #2ed573;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ff4757;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: #232323;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            color: #8371fd;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #232323;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #bbb;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #444;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #8371fd;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .order-list {
+            background: #232323;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .order-item {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-info h4 {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .order-info p {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #ffa502;
+            color: white;
+        }
+
+        .status-confirmed {
+            background: #2ed573;
+            color: white;
+        }
+
+        .status-delivered {
+            background: #5352ed;
+            color: white;
+        }
+
+        .vendor-request {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vendor-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .vendor-avatar {
+            width: 50px;
+            height: 50px;
+            background: #8371fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .vendor-details h4 {
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .vendor-details p {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-section {
+            background: #232323;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: #8371fd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2ed573;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 3000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .vendor-request {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .order-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <h1>🏪 Vendora</h1>
+            <p>Supplier Dashboard</p>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('products')">
+                    <span class="nav-icon">📦</span>
+                    My Products
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('orders')">
+                    <span class="nav-icon">🛒</span>
+                    Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('requests')">
+                    <span class="nav-icon">🤝</span>
+                    Vendor Requests
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('analytics')">
+                    <span class="nav-icon">📈</span>
+                    Analytics
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection('profile')">
+                    <span class="nav-icon">👤</span>
+                    Profile
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+                <h1>Welcome back, Supplier! 👋</h1>
+                <p>Manage your products and connect with vendors</p>
+            </div>
+            <div class="header-right">
+                <button class="notification-btn">
+                    🔔
+                    <span class="notification-badge">5</span>
+                </button>
+                <div id="supplierName" style="color: #bbb;">Mumbai Fresh Wholesale</div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="content-section active" id="dashboard">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">Orders This Month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">₹2,45,000</div>
+                    <div class="stat-label">Monthly Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🤝</div>
+                    <div class="stat-value">42</div>
+                    <div class="stat-label">Connected Vendors</div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h2 class="section-title">Recent Orders</h2>
+                <button class="btn btn-primary" onclick="showSection('orders')">View All Orders</button>
+            </div>
+
+            <div class="order-list">
+                <div class="order-item">
+                    <div class="order-info">
+                        <h4>Order #VD001 - Raj Kumar</h4>
+                        <p>Tomatoes (50kg), Onions (30kg) • ₹4,500</p>
+                        <p>📍 2.1 km away • Today, 10:30 AM</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span class="order-status status-pending">Pending</span>
+                        <button class="btn btn-success btn-small" onclick="confirmOrder('VD001')">Confirm</button>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-info">
+                        <h4>Order #VD002 - Priya Singh</h4>
+                        <p>Apples (25kg), Oranges (20kg) • ₹3,200</p>
+                        <p>📍 1.5 km away • Today, 9:15 AM</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span class="order-status status-confirmed">Confirmed</span>
+                        <button class="btn btn-primary btn-small" onclick="markDelivered('VD002')">Mark Delivered</button>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-info">
+                        <h4>Order #VD003 - Mohammed Ali</h4>
+                        <p>Red Chili (10kg), Turmeric (5kg) • ₹2,800</p>
+                        <p>📍 3.2 km away • Yesterday, 4:20 PM</p>
+                    </div>
+                    <span class="order-status status-delivered">Delivered</span>
+                </div>
+                <div class="order-item">
+                    <div class="order-info">
+                        <h4>Order #VD004 - Sunita Devi</h4>
+                        <p>Potatoes (40kg), Carrots (15kg) • ₹2,100</p>
+                        <p>📍 4.2 km away • Yesterday, 2:45 PM</p>
+                    </div>
+                    <span class="order-status status-delivered">Delivered</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Edit Modal -->
+        <div class="modal" id="profileEditModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Business Profile</h3>
+                    <button class="close-btn" onclick="closeProfileModal()">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label for="editBusinessName">Business Name</label>
+                    <input type="text" id="editBusinessName" placeholder="Enter business name">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editBusinessType">Business Type</label>
+                        <input type="text" id="editBusinessType" placeholder="E.g. Wholesale Supplier">
+                    </div>
+                    <div class="form-group">
+                        <label for="editLocation">Location</label>
+                        <input type="text" id="editLocation" placeholder="City, State">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Business Description</label>
+                    <textarea id="editDescription" rows="3" placeholder="Describe your business"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editContactPerson">Contact Person</label>
+                        <input type="text" id="editContactPerson" placeholder="Full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhone">Phone Number</label>
+                        <input type="tel" id="editPhone" placeholder="Phone number">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editEmail">Email Address</label>
+                        <input type="email" id="editEmail" placeholder="Email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="editGST">GST Number</label>
+                        <input type="text" id="editGST" placeholder="GST number">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editAddress">Business Address</label>
+                    <textarea id="editAddress" rows="2" placeholder="Full address"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editHours">Operating Hours</label>
+                    <input type="text" id="editHours" placeholder="E.g. Mon-Sat: 9AM-6PM">
+                </div>
+                <div class="form-group">
+                    <label>Categories Supplied</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                        <label style="display: flex; align-items: center; margin-right: 15px;">
+                            <input type="checkbox" id="categoryVegetables" style="margin-right: 5px;"> Vegetables
+                        </label>
+                        <label style="display: flex; align-items: center; margin-right: 15px;">
+                            <input type="checkbox" id="categoryFruits" style="margin-right: 5px;"> Fruits
+                        </label>
+                        <label style="display: flex; align-items: center; margin-right: 15px;">
+                            <input type="checkbox" id="categorySpices" style="margin-right: 5px;"> Spices
+                        </label>
+                        <label style="display: flex; align-items: center; margin-right: 15px;">
+                            <input type="checkbox" id="categoryGrains" style="margin-right: 5px;"> Grains
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" id="categoryDairy" style="margin-right: 5px;"> Dairy
+                        </label>
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+        <!-- Analytics Section -->
+        <div class="content-section" id="analytics">
+            <div class="section-header">
+                <h2>Analytics</h2>
+            </div>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-value">₹45,250</div>
+                    <div class="stat-label">Revenue This Month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">32</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">New Customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.6</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h3>Top Selling Products</h3>
+            </div>
+            
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image">🍅</div>
+                    <div class="product-info">
+                        <div class="product-name">Fresh Tomatoes</div>
+                        <div class="product-price">₹45/kg</div>
+                        <div class="product-details">Sold: 1,250 kg</div>
+                        <div class="product-details">Revenue: ₹56,250</div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">🧅</div>
+                    <div class="product-info">
+                        <div class="product-name">Red Onions</div>
+                        <div class="product-price">₹35/kg</div>
+                        <div class="product-details">Sold: 980 kg</div>
+                        <div class="product-details">Revenue: ₹34,300</div>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">🥔</div>
+                    <div class="product-info">
+                        <div class="product-name">Potatoes</div>
+                        <div class="product-price">₹25/kg</div>
+                        <div class="product-details">Sold: 1,100 kg</div>
+                        <div class="product-details">Revenue: ₹27,500</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="content-section" id="profile">
+            <div class="section-header">
+                <h2>Business Profile</h2>
+                <button class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
+            </div>
+            
+            <div class="profile-section">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">MF</div>
+                    <div>
+                        <h3 id="profileName">Mumbai Fresh Wholesale</h3>
+                        <p id="profileType">Wholesale Supplier</p>
+                        <p id="profileLocation">📍 Mumbai, Maharashtra</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Business Description</label>
+                    <p id="profileDescription">We are a leading wholesale supplier of fresh fruits and vegetables in Mumbai. Serving local vendors and businesses since 2010.</p>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Contact Person</label>
+                        <p id="profileContact">Rajesh Sharma</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <p id="profilePhone">+91 98765 43210</p>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <p id="profileEmail">contact@mumbaifresh.com</p>
+                    </div>
+                    <div class="form-group">
+                        <label>GST Number</label>
+                        <p id="profileGST">27AABCU9603R1ZX</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Business Address</label>
+                    <p id="profileAddress">Shop No. 42, APMC Market, Vashi, Navi Mumbai - 400703</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Operating Hours</label>
+                    <p id="profileHours">Monday to Saturday: 5:00 AM - 2:00 PM</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Business Experience</label>
+                    <p id="profileExperience">5-10 years</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Delivery Range</label>
+                    <p id="profileDeliveryRange">Within 10 km</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Minimum Order Value</label>
+                    <p id="profileMinOrder">₹500</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Daily Supply Capacity</label>
+                    <p id="profileCapacity">1000 kg/units</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Lead Time for Orders</label>
+                    <p id="profileLeadTime">Next Day</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Specific Products</label>
+                    <p id="profileSpecificProducts">Tomatoes, Onions, Potatoes, Red Chili, Turmeric</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred Contact Method</label>
+                    <p id="profileContactMethod">WhatsApp</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Categories Supplied</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;" id="profileCategories">
+                        <span class="order-status status-confirmed">Vegetables</span>
+                        <span class="order-status status-confirmed">Fruits</span>
+                        <span class="order-status status-confirmed">Spices</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <div class="form-group">
+                    <label for="editDescription">Business Description</label>
+                    <textarea id="editDescription" rows="3" placeholder="Describe your business"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editContactPerson">Contact Person</label>
+                        <input type="text" id="editContactPerson" placeholder="Full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhone">Phone Number</label>
+                        <input type="tel" id="editPhone" placeholder="Phone number">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editEmail">Email Address</label>
+                        <input type="email" id="editEmail" placeholder="Email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="editGST">GST Number</label>
+                        <input type="text" id="editGST" placeholder="GST number">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editAddress">Business Address</label>
+                    <textarea id="editAddress" rows="2" placeholder="Full address"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editHours">Operating Hours</label>
+                    <input type="text" id="editHours" placeholder="E.g. Mon-Sat: 9AM-6PM">
+                </div>
+                <div class="form-group">
+                    <label>Categories Supplied</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                        <label style="display: flex; align-items: center; margin-right: 15px;">
+                            <input type="checkbox" id="categoryVegetables" style="margin-right: 5px;"> Vegetables
+                        </label>
+                        <label style="display: flex; align-items: center; margin-right: 15px;">
+                            <input type="checkbox" id="categoryFruits" style="margin-right: 5px;"> Fruits
+                        </label>
+                        <label style="display: flex; align-items: center; margin-right: 15px;">
+                            <input type="checkbox" id="categorySpices" style="margin-right: 5px;"> Spices
+                        </label>
+                        <label style="display: flex; align-items: center; margin-right: 15px;">
+                            <input type="checkbox" id="categoryGrains" style="margin-right: 5px;"> Grains
+                        </label>
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" id="categoryDairy" style="margin-right: 5px;"> Dairy
+                        </label>
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Product Modal -->
+        <div class="modal" id="addProductModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add New Product</h3>
+                    <button class="close-btn" onclick="closeAddProductModal()">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label for="productName">Product Name *</label>
+                    <input type="text" id="productName" placeholder="Enter product name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">Price (₹) *</label>
+                        <input type="number" id="productPrice" placeholder="Enter price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productUnit">Unit *</label>
+                        <select id="productUnit" required>
+                            <option value="">Select unit</option>
+                            <option value="per kg">per kg</option>
+                            <option value="per dozen">per dozen</option>
+                            <option value="per piece">per piece</option>
+                            <option value="per 100g">per 100g</option>
+                            <option value="per liter">per liter</option>
+                            <option value="per 500g">per 500g</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productStock">Stock Quantity *</label>
+                        <input type="number" id="productStock" placeholder="Enter stock quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Category *</label>
+                        <select id="productCategory" required>
+                            <option value="">Select category</option>
+                            <option value="vegetables">🥕 Vegetables</option>
+                            <option value="fruits">🍎 Fruits</option>
+                            <option value="spices">🌶️ Spices</option>
+                            <option value="grains">🌾 Grains</option>
+                            <option value="dairy">🥛 Dairy</option>
+                            <option value="snacks">🥜 Snacks</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="3" placeholder="Enter product description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <div class="upload-area" onclick="document.getElementById('productImage').click()">
+                        <div class="upload-icon">📸</div>
+                        <h3>Upload Product Image</h3>
+                        <p>Click to upload product image</p>
+                        <input type="file" id="productImage" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="closeAddProductModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveProduct()">Add Product</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Product Modal -->
+        <div class="modal" id="editProductModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Product</h3>
+                    <button class="close-btn" onclick="closeEditProductModal()">&times;</button>
+                </div>
+                <input type="hidden" id="editProductId">
+                <div class="form-group">
+                    <label for="editProductName">Product Name *</label>
+                    <input type="text" id="editProductName" placeholder="Enter product name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editProductPrice">Price (₹) *</label>
+                        <input type="number" id="editProductPrice" placeholder="Enter price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductUnit">Unit *</label>
+                        <select id="editProductUnit" required>
+                            <option value="">Select unit</option>
+                            <option value="per kg">per kg</option>
+                            <option value="per dozen">per dozen</option>
+                            <option value="per piece">per piece</option>
+                            <option value="per 100g">per 100g</option>
+                            <option value="per liter">per liter</option>
+                            <option value="per 500g">per 500g</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editProductStock">Stock Quantity *</label>
+                        <input type="number" id="editProductStock" placeholder="Enter stock quantity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editProductCategory">Category *</label>
+                        <select id="editProductCategory" required>
+                            <option value="">Select category</option>
+                            <option value="vegetables">🥕 Vegetables</option>
+                            <option value="fruits">🍎 Fruits</option>
+                            <option value="spices">🌶️ Spices</option>
+                            <option value="grains">🌾 Grains</option>
+                            <option value="dairy">🥛 Dairy</option>
+                            <option value="snacks">🥜 Snacks</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editProductDescription">Description</label>
+                    <textarea id="editProductDescription" rows="3" placeholder="Enter product description"></textarea>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="closeEditProductModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="updateProduct()">Update Product</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vendor Profile Modal -->
+        <div class="modal" id="vendorProfileModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Vendor Profile</h3>
+                    <button class="close-btn" onclick="closeVendorProfileModal()">&times;</button>
+                </div>
+                <div id="vendorProfileContent">
+                    <!-- Vendor profile content will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Component -->
+        <div class="notification" id="notification"></div>
+
+        <script>
+            // Sample data
+            const sampleProducts = [
+                { id: 1, name: "Fresh Tomatoes", price: 45, stock: 500, category: "vegetables", rating: 4.5, image: "🍅", unit: "per kg", description: "Fresh red tomatoes from local farms" },
+                { id: 2, name: "Red Onions", price: 35, stock: 350, category: "vegetables", rating: 4.2, image: "🧅", unit: "per kg", description: "Fresh red onions" },
+                { id: 3, name: "Potatoes", price: 25, stock: 420, category: "vegetables", rating: 4.0, image: "🥔", unit: "per kg", description: "Fresh potatoes" },
+                { id: 4, name: "Green Apples", price: 120, stock: 200, category: "fruits", rating: 4.7, image: "🍏", unit: "per kg", description: "Fresh green apples" },
+                { id: 5, name: "Bananas", price: 60, stock: 300, category: "fruits", rating: 4.3, image: "🍌", unit: "per dozen", description: "Fresh yellow bananas" },
+                { id: 6, name: "Red Chilli Powder", price: 180, stock: 100, category: "spices", rating: 4.8, image: "🌶️", unit: "per 100g", description: "Pure red chilli powder" },
+            ];
+
+            const sampleOrders = [
+                { id: "VD001", customer: "Raj Kumar", items: "Tomatoes (50kg), Onions (30kg)", total: 4500, date: "2023-08-15", status: "pending", distance: "2.1 km", time: "Today, 10:30 AM" },
+                { id: "VD002", customer: "Priya Singh", items: "Apples (25kg), Oranges (20kg)", total: 3200, date: "2023-08-16", status: "confirmed", distance: "1.5 km", time: "Today, 9:15 AM" },
+                { id: "VD003", customer: "Mohammed Ali", items: "Red Chili (10kg), Turmeric (5kg)", total: 2800, date: "2023-08-17", status: "delivered", distance: "3.2 km", time: "Yesterday, 4:20 PM" },
+                { id: "VD004", customer: "Sunita Devi", items: "Potatoes (40kg), Carrots (15kg)", total: 2100, date: "2023-08-18", status: "delivered", distance: "4.2 km", time: "Yesterday, 2:45 PM" },
+                { id: "VD005", customer: "Amit Patel", items: "Milk (20L), Paneer (5kg)", total: 1800, date: "2023-08-19", status: "pending", distance: "1.8 km", time: "Today, 11:45 AM" },
+                { id: "VD006", customer: "Lakshmi Devi", items: "Rice (25kg), Dal (10kg)", total: 3200, date: "2023-08-20", status: "confirmed", distance: "2.5 km", time: "Today, 8:30 AM" },
+            ];
+
+            const sampleVendorRequests = [
+                { id: "RK", name: "Raj Kumar", business: "Vegetable Vendor", avatar: "RK", lookingFor: "Fresh Tomatoes, Onions", distance: "2.1 km", budget: "₹2,000-5,000/week", rating: 4.3, status: "pending" },
+                { id: "PS", name: "Priya Singh", business: "Fruit Cart", avatar: "PS", lookingFor: "Seasonal Fruits", distance: "1.5 km", budget: "₹3,000-8,000/week", rating: 4.7, status: "pending" },
+                { id: "MA", name: "Mohammed Ali", business: "Spice Vendor", avatar: "MA", lookingFor: "Whole Spices", distance: "3.2 km", budget: "₹1,500-4,000/week", rating: 4.5, status: "pending" },
+                { id: "SD", name: "Sunita Devi", business: "Street Food", avatar: "SD", lookingFor: "Vegetables, Spices", distance: "2.8 km", budget: "₹2,500-6,000/week", rating: 4.6, status: "pending" },
+                { id: "AP", name: "Amit Patel", business: "Dairy Vendor", avatar: "AP", lookingFor: "Milk, Paneer", distance: "1.8 km", budget: "₹1,800-4,500/week", rating: 4.4, status: "pending" },
+            ];
+
+            // Global variables
+            let products = [...sampleProducts];
+            let orders = [...sampleOrders];
+            let vendorRequests = [...sampleVendorRequests];
+            let currentOrderFilter = 'all';
+
+            // Navigation functionality
+            function showSection(sectionId) {
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show the selected section
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                const activeLink = document.querySelector(`.nav-link[onclick*="'${sectionId}'"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+
+                // Load section-specific data
+                if (sectionId === 'products') {
+                    renderProducts();
+                } else if (sectionId === 'orders') {
+                    renderOrders();
+                } else if (sectionId === 'requests') {
+                    renderVendorRequests();
+                }
+            }
+
+            // Mobile menu toggle
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('mobile-hidden');
+                document.getElementById('mainContent').classList.toggle('full-width');
+            }
+
+            // Profile functionality
+            let profileData = {
+                name: "Mumbai Fresh Wholesale",
+                type: "Wholesale Supplier",
+                location: "Mumbai, Maharashtra",
+                description: "We are a leading wholesale supplier of fresh fruits and vegetables in Mumbai. Serving local vendors and businesses since 2010.",
+                contactPerson: "Rajesh Sharma",
+                phone: "+91 98765 43210",
+                email: "contact@mumbaifresh.com",
+                gst: "27AABCU9603R1ZX",
+                address: "Shop No. 42, APMC Market, Vashi, Navi Mumbai - 400703",
+                hours: "Monday to Saturday: 5:00 AM - 2:00 PM",
+                categories: ["Vegetables", "Fruits", "Spices"]
+            };
+
+            // Load profile data from localStorage if available
+            function loadProfileData() {
+                // First check for registration data
+                const registrationData = localStorage.getItem('vendoraSupplierRegistration');
+                if (registrationData) {
+                    const regData = JSON.parse(registrationData);
+                    
+                    // Convert registration data to profile format
+                    profileData = {
+                        name: regData.businessName || "Mumbai Fresh Wholesale",
+                        type: regData.businessType || "Wholesale Supplier",
+                        location: "Mumbai, Maharashtra", // Default location
+                        description: regData.description || "We are a leading wholesale supplier of fresh fruits and vegetables in Mumbai. Serving local vendors and businesses since 2010.",
+                        contactPerson: regData.supplierName || "Rajesh Sharma",
+                        phone: regData.phone || "+91 98765 43210",
+                        email: regData.email || "contact@mumbaifresh.com",
+                        gst: regData.gstNumber || "27AABCU9603R1ZX",
+                        address: regData.businessAddress || "Shop No. 42, APMC Market, Vashi, Navi Mumbai - 400703",
+                        hours: regData.operatingHours || "Monday to Saturday: 5:00 AM - 2:00 PM",
+                        categories: regData.products || ["Vegetables", "Fruits", "Spices"],
+                        whatsapp: regData.whatsapp || "",
+                        experience: regData.experience || "",
+                        deliveryRange: regData.deliveryRange || "",
+                        minOrderValue: regData.minOrderValue || "",
+                        dailyCapacity: regData.dailyCapacity || "",
+                        leadTime: regData.leadTime || "",
+                        specificProducts: regData.specificProducts || "",
+                        preferredContact: regData.preferredContact || "whatsapp"
+                    };
+                    
+                    // Save as profile data for future use
+                    localStorage.setItem('vendoraSupplierProfile', JSON.stringify(profileData));
+                    
+                    // Clear registration data to avoid conflicts
+                    localStorage.removeItem('vendoraSupplierRegistration');
+                } else {
+                    // Load existing profile data if no registration data
+                    const savedProfile = localStorage.getItem('vendoraSupplierProfile');
+                    if (savedProfile) {
+                        profileData = JSON.parse(savedProfile);
+                    }
+                }
+                renderProfile();
+            }
+
+            // Render profile data to the profile section
+            function renderProfile() {
+                // Set profile avatar
+                const initials = profileData.name.split(' ')
+                    .map(word => word[0])
+                    .join('')
+                    .substring(0, 2)
+                    .toUpperCase();
+                document.getElementById('profileAvatar').textContent = initials;
+                
+                // Set profile details
+                document.getElementById('profileName').textContent = profileData.name;
+                document.getElementById('profileType').textContent = profileData.type;
+                document.getElementById('profileLocation').textContent = `📍 ${profileData.location}`;
+                document.getElementById('profileDescription').textContent = profileData.description;
+                document.getElementById('profileContact').textContent = profileData.contactPerson;
+                document.getElementById('profilePhone').textContent = profileData.phone;
+                document.getElementById('profileEmail').textContent = profileData.email;
+                document.getElementById('profileGST').textContent = profileData.gst;
+                document.getElementById('profileAddress').textContent = profileData.address;
+                document.getElementById('profileHours').textContent = profileData.hours;
+                
+                // Set additional profile fields
+                document.getElementById('profileExperience').textContent = profileData.experience || '5-10 years';
+                document.getElementById('profileDeliveryRange').textContent = profileData.deliveryRange || 'Within 10 km';
+                document.getElementById('profileMinOrder').textContent = profileData.minOrderValue ? `₹${profileData.minOrderValue}` : '₹500';
+                document.getElementById('profileCapacity').textContent = profileData.dailyCapacity ? `${profileData.dailyCapacity} kg/units` : '1000 kg/units';
+                document.getElementById('profileLeadTime').textContent = profileData.leadTime || 'Next Day';
+                document.getElementById('profileSpecificProducts').textContent = profileData.specificProducts || 'Tomatoes, Onions, Potatoes, Red Chili, Turmeric';
+                document.getElementById('profileContactMethod').textContent = profileData.preferredContact || 'WhatsApp';
+                
+                // Update supplier name in header
+                const supplierNameElement = document.querySelector('.header-right div');
+                if (supplierNameElement) {
+                    supplierNameElement.textContent = profileData.name;
+                }
+                
+                // Update categories
+                const categoriesContainer = document.getElementById('profileCategories');
+                if (categoriesContainer) {
+                    categoriesContainer.innerHTML = '';
+                    
+                    if (profileData.categories && profileData.categories.length > 0) {
+                        profileData.categories.forEach(category => {
+                            const span = document.createElement('span');
+                            span.className = 'order-status status-confirmed';
+                            span.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                            categoriesContainer.appendChild(span);
+                        });
+                    } else {
+                        // Default categories if none provided
+                        const defaultCategories = ['Vegetables', 'Fruits', 'Spices'];
+                        defaultCategories.forEach(category => {
+                            const span = document.createElement('span');
+                            span.className = 'order-status status-confirmed';
+                            span.textContent = category;
+                            categoriesContainer.appendChild(span);
+                        });
+                    }
+                }
+            }
+
+            // Open profile edit modal
+            function editProfile() {
+                // Populate form fields with current data
+                document.getElementById('editBusinessName').value = profileData.name;
+                document.getElementById('editBusinessType').value = profileData.type;
+                document.getElementById('editLocation').value = profileData.location;
+                document.getElementById('editDescription').value = profileData.description;
+                document.getElementById('editContactPerson').value = profileData.contactPerson;
+                document.getElementById('editPhone').value = profileData.phone;
+                document.getElementById('editEmail').value = profileData.email;
+                document.getElementById('editGST').value = profileData.gst;
+                document.getElementById('editAddress').value = profileData.address;
+                document.getElementById('editHours').value = profileData.hours;
+                
+                // Populate additional fields
+                document.getElementById('editExperience').value = profileData.experience || '';
+                document.getElementById('editDeliveryRange').value = profileData.deliveryRange || '';
+                document.getElementById('editMinOrder').value = profileData.minOrderValue || '';
+                document.getElementById('editCapacity').value = profileData.dailyCapacity || '';
+                document.getElementById('editLeadTime').value = profileData.leadTime || '';
+                document.getElementById('editSpecificProducts').value = profileData.specificProducts || '';
+                document.getElementById('editContactMethod').value = profileData.preferredContact || 'whatsapp';
+                
+                // Reset checkboxes
+                document.querySelectorAll('#profileEditModal input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // Check the appropriate category checkboxes
+                if (profileData.categories) {
+                    profileData.categories.forEach(category => {
+                        const checkboxId = `category${category.charAt(0).toUpperCase() + category.slice(1)}`;
+                        const checkbox = document.getElementById(checkboxId);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+                }
+                
+                // Show the modal
+                document.getElementById('profileEditModal').style.display = 'block';
+            }
+
+            // Close profile edit modal
+            function closeProfileModal() {
+                document.getElementById('profileEditModal').style.display = 'none';
+            }
+
+            // Save profile changes
+            function saveProfile() {
+                // Get values from form
+                profileData.name = document.getElementById('editBusinessName').value;
+                profileData.type = document.getElementById('editBusinessType').value;
+                profileData.location = document.getElementById('editLocation').value;
+                profileData.description = document.getElementById('editDescription').value;
+                profileData.contactPerson = document.getElementById('editContactPerson').value;
+                profileData.phone = document.getElementById('editPhone').value;
+                profileData.email = document.getElementById('editEmail').value;
+                profileData.gst = document.getElementById('editGST').value;
+                profileData.address = document.getElementById('editAddress').value;
+                profileData.hours = document.getElementById('editHours').value;
+                
+                // Get additional field values
+                profileData.experience = document.getElementById('editExperience').value;
+                profileData.deliveryRange = document.getElementById('editDeliveryRange').value;
+                profileData.minOrderValue = document.getElementById('editMinOrder').value;
+                profileData.dailyCapacity = document.getElementById('editCapacity').value;
+                profileData.leadTime = document.getElementById('editLeadTime').value;
+                profileData.specificProducts = document.getElementById('editSpecificProducts').value;
+                profileData.preferredContact = document.getElementById('editContactMethod').value;
+                
+                // Get selected categories
+                profileData.categories = [];
+                if (document.getElementById('categoryVegetables').checked) profileData.categories.push('Vegetables');
+                if (document.getElementById('categoryFruits').checked) profileData.categories.push('Fruits');
+                if (document.getElementById('categorySpices').checked) profileData.categories.push('Spices');
+                if (document.getElementById('categoryGrains').checked) profileData.categories.push('Grains');
+                if (document.getElementById('categoryDairy').checked) profileData.categories.push('Dairy');
+                
+                // Save to localStorage
+                localStorage.setItem('vendoraSupplierProfile', JSON.stringify(profileData));
+                
+                // Update the profile display
+                renderProfile();
+                
+                // Close the modal
+                closeProfileModal();
+                
+                // Show notification
+                showNotification('Profile updated successfully!');
+            }
+
+            // Show notification
+            function showNotification(message) {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.style.transform = 'translateY(0)';
+                
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(150%)';
+                }, 3000);
+            }
+
+            // Product functions
+            function openAddProductModal() {
+                // Clear form
+                document.getElementById('productName').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productUnit').value = '';
+                document.getElementById('productStock').value = '';
+                document.getElementById('productCategory').value = '';
+                document.getElementById('productDescription').value = '';
+                
+                // Show modal
+                document.getElementById('addProductModal').style.display = 'block';
+            }
+
+            function closeAddProductModal() {
+                document.getElementById('addProductModal').style.display = 'none';
+            }
+
+            function saveProduct() {
+                const name = document.getElementById('productName').value;
+                const price = document.getElementById('productPrice').value;
+                const unit = document.getElementById('productUnit').value;
+                const stock = document.getElementById('productStock').value;
+                const category = document.getElementById('productCategory').value;
+                const description = document.getElementById('productDescription').value;
+
+                if (!name || !price || !unit || !stock || !category) {
+                    showNotification('Please fill in all required fields!');
+                    return;
+                }
+
+                const newProduct = {
+                    id: products.length + 1,
+                    name: name,
+                    price: parseFloat(price),
+                    stock: parseInt(stock),
+                    category: category,
+                    rating: 4.0,
+                    image: getCategoryEmoji(category),
+                    unit: unit,
+                    description: description
+                };
+
+                products.push(newProduct);
+                closeAddProductModal();
+                renderProducts();
+                showNotification('Product added successfully!');
+            }
+
+            function editProduct(id) {
+                const product = products.find(p => p.id === id);
+                if (!product) return;
+
+                // Populate form
+                document.getElementById('editProductId').value = product.id;
+                document.getElementById('editProductName').value = product.name;
+                document.getElementById('editProductPrice').value = product.price;
+                document.getElementById('editProductUnit').value = product.unit;
+                document.getElementById('editProductStock').value = product.stock;
+                document.getElementById('editProductCategory').value = product.category;
+                document.getElementById('editProductDescription').value = product.description;
+
+                // Show modal
+                document.getElementById('editProductModal').style.display = 'block';
+            }
+
+            function closeEditProductModal() {
+                document.getElementById('editProductModal').style.display = 'none';
+            }
+
+            function updateProduct() {
+                const id = parseInt(document.getElementById('editProductId').value);
+                const name = document.getElementById('editProductName').value;
+                const price = document.getElementById('editProductPrice').value;
+                const unit = document.getElementById('editProductUnit').value;
+                const stock = document.getElementById('editProductStock').value;
+                const category = document.getElementById('editProductCategory').value;
+                const description = document.getElementById('editProductDescription').value;
+
+                if (!name || !price || !unit || !stock || !category) {
+                    showNotification('Please fill in all required fields!');
+                    return;
+                }
+
+                const productIndex = products.findIndex(p => p.id === id);
+                if (productIndex !== -1) {
+                    products[productIndex] = {
+                        ...products[productIndex],
+                        name: name,
+                        price: parseFloat(price),
+                        unit: unit,
+                        stock: parseInt(stock),
+                        category: category,
+                        description: description,
+                        image: getCategoryEmoji(category)
+                    };
+                }
+
+                closeEditProductModal();
+                renderProducts();
+                showNotification('Product updated successfully!');
+            }
+
+            function deleteProduct(id) {
+                if (confirm('Are you sure you want to delete this product?')) {
+                    products = products.filter(p => p.id !== id);
+                    renderProducts();
+                    showNotification('Product deleted successfully!');
+                }
+            }
+
+            function renderProducts() {
+                const productGrid = document.querySelector('#products .product-grid');
+                if (!productGrid) return;
+
+                productGrid.innerHTML = '';
+                
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <div class="product-image">${product.image}</div>
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-price">₹${product.price}/${product.unit}</div>
+                            <div class="product-details">
+                                <span>Stock: ${product.stock}${product.unit.includes('kg') ? 'kg' : product.unit.includes('L') ? 'L' : ''}</span>
+                                <span>⭐ ${product.rating}</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-secondary btn-small" onclick="editProduct(${product.id})">Edit</button>
+                                <button class="btn btn-danger btn-small" onclick="deleteProduct(${product.id})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                    productGrid.appendChild(productCard);
+                });
+            }
+
+            function getCategoryEmoji(category) {
+                const emojis = {
+                    'vegetables': '🥕',
+                    'fruits': '🍎',
+                    'spices': '🌶️',
+                    'grains': '🌾',
+                    'dairy': '🥛',
+                    'snacks': '🥜'
+                };
+                return emojis[category] || '🛒';
+            }
+
+            // Order functions
+            function confirmOrder(id) {
+                const orderIndex = orders.findIndex(o => o.id === id);
+                if (orderIndex !== -1) {
+                    orders[orderIndex].status = 'confirmed';
+                    renderOrders();
+                    showNotification(`Order ${id} confirmed!`);
+                }
+            }
+
+            function markDelivered(id) {
+                const orderIndex = orders.findIndex(o => o.id === id);
+                if (orderIndex !== -1) {
+                    orders[orderIndex].status = 'delivered';
+                    renderOrders();
+                    showNotification(`Order ${id} marked as delivered!`);
+                }
+            }
+
+            function filterOrders(status) {
+                currentOrderFilter = status;
+                renderOrders();
+            }
+
+            function renderOrders() {
+                const orderList = document.querySelector('#orders .order-list');
+                if (!orderList) return;
+
+                orderList.innerHTML = '';
+                
+                let filteredOrders = orders;
+                if (currentOrderFilter !== 'all') {
+                    filteredOrders = orders.filter(o => o.status === currentOrderFilter);
+                }
+
+                filteredOrders.forEach(order => {
+                    const orderItem = document.createElement('div');
+                    orderItem.className = 'order-item';
+                    
+                    let actionButtons = '';
+                    if (order.status === 'pending') {
+                        actionButtons = `
+                            <span class="order-status status-pending">Pending</span>
+                            <button class="btn btn-success btn-small" onclick="confirmOrder('${order.id}')">Confirm</button>
+                        `;
+                    } else if (order.status === 'confirmed') {
+                        actionButtons = `
+                            <span class="order-status status-confirmed">Confirmed</span>
+                            <button class="btn btn-primary btn-small" onclick="markDelivered('${order.id}')">Mark Delivered</button>
+                        `;
+                    } else {
+                        actionButtons = `<span class="order-status status-delivered">Delivered</span>`;
+                    }
+
+                    orderItem.innerHTML = `
+                        <div class="order-info">
+                            <h4>Order #${order.id} - ${order.customer}</h4>
+                            <p>${order.items} • ₹${order.total.toLocaleString()}</p>
+                            <p>📍 ${order.distance} away • ${order.time}</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            ${actionButtons}
+                        </div>
+                    `;
+                    orderList.appendChild(orderItem);
+                });
+            }
+
+            // Vendor request functions
+            function acceptRequest(id) {
+                const requestIndex = vendorRequests.findIndex(r => r.id === id);
+                if (requestIndex !== -1) {
+                    vendorRequests[requestIndex].status = 'accepted';
+                    renderVendorRequests();
+                    showNotification(`Vendor request ${id} accepted!`);
+                }
+            }
+
+            function viewVendorProfile(id) {
+                const vendor = vendorRequests.find(r => r.id === id);
+                if (!vendor) return;
+
+                const modal = document.getElementById('vendorProfileModal');
+                const content = document.getElementById('vendorProfileContent');
+                
+                content.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div class="vendor-avatar" style="margin: 0 auto 15px;">${vendor.avatar}</div>
+                        <h3>${vendor.name}</h3>
+                        <p style="color: #bbb;">${vendor.business}</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Looking for:</label>
+                        <p>${vendor.lookingFor}</p>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Distance:</label>
+                            <p>${vendor.distance}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Budget:</label>
+                            <p>${vendor.budget}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Rating:</label>
+                        <p>⭐ ${vendor.rating}/5.0</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="acceptRequest('${vendor.id}'); closeVendorProfileModal();">Accept Request</button>
+                        <button class="btn btn-secondary" onclick="closeVendorProfileModal()">Close</button>
+                    </div>
+                `;
+                
+                modal.style.display = 'block';
+            }
+
+            function closeVendorProfileModal() {
+                document.getElementById('vendorProfileModal').style.display = 'none';
+            }
+
+            function renderVendorRequests() {
+                const requestsContainer = document.querySelector('#requests');
+                if (!requestsContainer) return;
+
+                const pendingRequests = vendorRequests.filter(r => r.status === 'pending');
+                const requestsCount = document.querySelector('#requests .section-header div');
+                if (requestsCount) {
+                    requestsCount.textContent = `${pendingRequests.length} Pending Requests`;
+                }
+
+                const requestsList = requestsContainer.querySelectorAll('.vendor-request');
+                requestsList.forEach((request, index) => {
+                    if (index < pendingRequests.length) {
+                        const vendor = pendingRequests[index];
+                        const vendorInfo = request.querySelector('.vendor-info');
+                        const vendorDetails = vendorInfo.querySelector('.vendor-details');
+                        
+                        vendorInfo.querySelector('.vendor-avatar').textContent = vendor.avatar;
+                        vendorDetails.querySelector('h4').textContent = `${vendor.name} - ${vendor.business}`;
+                        vendorDetails.querySelectorAll('p')[0].textContent = `Looking for: ${vendor.lookingFor} • ${vendor.distance} away`;
+                        vendorDetails.querySelectorAll('p')[1].textContent = `💰 Budget: ${vendor.budget} • ⭐ ${vendor.rating} rating`;
+                    }
+                });
+            }
+
+            // Initialize the dashboard
+            document.addEventListener('DOMContentLoaded', function() {
+                // Load profile data
+                loadProfileData();
+                
+                // Show dashboard section by default
+                showSection('dashboard');
+                
+                // Close modals when clicking outside
+                window.onclick = function(event) {
+                    const modals = document.querySelectorAll('.modal');
+                    modals.forEach(modal => {
+                        if (event.target === modal) {
+                            modal.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        </script>
+
+        <!-- Products Section -->
+        <div class="content-section" id="products">
+            <div class="section-header">
+                <h2 class="section-title">My Products</h2>
+                <button class="btn btn-primary" onclick="openAddProductModal()">+ Add New Product</button>
+            </div>
+
+            <div class="product-grid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="content-section" id="orders">
+            <div class="section-header">
+                <h2 class="section-title">All Orders</h2>
+                <select class="btn btn-secondary" onchange="filterOrders(this.value)">
+                    <option value="all">All Orders</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="delivered">Delivered</option>
+                </select>
+            </div>
+
+            <div class="order-list">
+                <!-- Orders will be dynamically loaded here -->
+            </div>
+        </div>
+
+        <!-- Vendor Requests Section -->
+        <div class="content-section" id="requests">
+            <div class="section-header">
+                <h2 class="section-title">Vendor Connection Requests</h2>
+                <div style="color: #bbb;">15 Pending Requests</div>
+            </div>
+
+            <div class="vendor-request">
+                <div class="vendor-info">
+                    <div class="vendor-avatar">RK</div>
+                    <div class="vendor-details">
+                        <h4>Raj Kumar - Vegetable Vendor</h4>
+                        <p>Looking for: Fresh Tomatoes, Onions • 2.1 km away</p>
+                        <p>💰 Budget: ₹2,000-5,000/week • ⭐ 4.3 rating</p>
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn btn-primary btn-small" onclick="acceptRequest('RK')">Accept</button>
+                    <button class="btn btn-secondary btn-small" onclick="viewVendorProfile('RK')">View Profile</button>
+                </div>
+            </div>
+
+            <div class="vendor-request">
+                <div class="vendor-info">
+                    <div class="vendor-avatar">PS</div>
+                    <div class="vendor-details">
+                        <h4>Priya Singh - Fruit Cart</h4>
+                        <p>Looking for: Seasonal Fruits • 1.5 km away</p>
+                        <p>💰 Budget: ₹3,000-8,000/week • ⭐ 4.7 rating</p>
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn btn-primary btn-small" onclick="acceptRequest('PS')">Accept</button>
+                    <button class="btn btn-secondary btn-small" onclick="viewVendorProfile('PS')">View Profile</button>
+                </div>
+            </div>
+
+            <div class="vendor-request">
+                <div class="vendor-info">
+                    <div class="vendor-avatar">MA</div>
+                    <div class="vendor-details">
+                        <h4>Mohammed Ali - Spice Vendor</h4>
+                        <p>Looking for: Whole Spices • 3.2 km away</p>
+                        <p>💰 Budget: ₹1,500-4,000/week • ⭐ 4.5 rating</p>
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn btn-primary btn-small" onclick="acceptRequest('MA')">Accept</button>
+                    <button class="btn btn-secondary btn-small" onclick="viewVendorProfile('MA')">View Profile</button>
+                </div>
+            </div>
+
+            <div class="vendor-request">
+                <div class="vendor-info">
+                    <div class="vendor-avatar">SD</div>
+                    <div class="vendor-details">
+                        <h4>Sunita Devi - Street Food</h4>
+                        <p>Looking for: Vegetables, Spices • 2.8 km away</p>
+                        <p>💰 Budget: ₹2,500-6,000/week • ⭐ 4.6 rating</p>
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn btn-primary btn-small" onclick="acceptRequest('SD')">Accept</button>
+                    <button class="btn btn-secondary btn-small" onclick="viewVendorProfile('SD')">View Profile</button>
+                </div>
+            </div>
+
+            <div class="vendor-request">
+                <div class="vendor-info">
+                    <div class="vendor-avatar">AP</div>
+                    <div class="vendor-details">
+                        <h4>Amit Patel - Dairy Vendor</h4>
+                        <p>Looking for: Milk, Paneer • 1.8 km away</p>
+                        <p>💰 Budget: ₹1,800-4,500/week • ⭐ 4.4 rating</p>
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn btn-primary btn-small" onclick="acceptRequest('AP')">Accept</button>
+                    <button class="btn btn-secondary btn-small" onclick="viewVendorProfile('AP')">View Profile</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
