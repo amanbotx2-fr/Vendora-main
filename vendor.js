@@ -1,11 +1,9 @@
-
 let currentStep = 1;
 const totalSteps = 5;
 
 function nextStep() {
     if (currentStep < totalSteps) {
         if (validateCurrentStep()) {
-            // Save profile info if moving from step 2 to 3
             if (currentStep === 2) {
                 const profile = {
                     name: document.getElementById('vendorName').value,
@@ -16,18 +14,14 @@ function nextStep() {
                 };
                 localStorage.setItem('vendoraProfile', JSON.stringify(profile));
             }
-            // Hide current step
             document.getElementById(`step${currentStep}`).classList.remove('active');
             document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('completed');
             document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
-            // Show next step
             currentStep++;
             document.getElementById(`step${currentStep}`).classList.add('active');
             document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
-            // Update progress bar
             const progress = (currentStep / totalSteps) * 100;
             document.getElementById('progressFill').style.width = `${progress}%`;
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
@@ -35,21 +29,14 @@ function nextStep() {
 
 function prevStep() {
     if (currentStep > 1) {
-        // Hide current step
         document.getElementById(`step${currentStep}`).classList.remove('active');
         document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
-        
-        // Show previous step
         currentStep--;
         document.getElementById(`step${currentStep}`).classList.add('active');
         document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
         document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('completed');
-        
-        // Update progress bar
         const progress = (currentStep / totalSteps) * 100;
         document.getElementById('progressFill').style.width = `${progress}%`;
-        
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
@@ -62,7 +49,6 @@ function validateCurrentStep() {
             const name = document.getElementById('vendorName').value;
             const phone = document.getElementById('phone').value;
             const location = document.getElementById('location').value;
-            
             if (!name || !phone || !location) {
                 alert('Please fill in all required fields (Name, Phone, Location)');
                 return false;
@@ -85,7 +71,6 @@ function validateCurrentStep() {
 function toggleProduct(element) {
     const checkbox = element.querySelector('input[type="checkbox"]');
     checkbox.checked = !checkbox.checked;
-    
     if (checkbox.checked) {
         element.classList.add('selected');
     } else {
@@ -103,7 +88,6 @@ function goToApp() {
     window.location.href = 'vendora_buy.html';
 }
 
-// File upload handlers
 document.getElementById('license').addEventListener('change', function(e) {
     const fileName = e.target.files[0]?.name;
     if (fileName) {
@@ -118,7 +102,6 @@ document.getElementById('photos').addEventListener('change', function(e) {
     }
 });
 
-// Auto-save form data to prevent loss
 function saveFormData() {
     const formData = {};
     const inputs = document.querySelectorAll('input, select, textarea');
@@ -135,11 +118,9 @@ function saveFormData() {
     localStorage.setItem('vendorRegistrationData', JSON.stringify(formData));
 }
 
-// Save data on every input change
 document.addEventListener('input', saveFormData);
 document.addEventListener('change', saveFormData);
 
-// Load saved data on page load
 window.addEventListener('load', function() {
     const savedData = localStorage.getItem('vendorRegistrationData');
     if (savedData) {
@@ -152,4 +133,3 @@ window.addEventListener('load', function() {
         });
     }
 });
-   

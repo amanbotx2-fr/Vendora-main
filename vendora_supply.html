@@ -946,7 +946,6 @@
       function nextStep() {
         if (currentStep < totalSteps) {
           if (validateCurrentStep()) {
-            // Hide current step
             document
               .getElementById(`step${currentStep}`)
               .classList.remove("active");
@@ -957,7 +956,6 @@
               .querySelector(`.step[data-step="${currentStep}"]`)
               .classList.remove("active");
 
-            // Show next step
             currentStep++;
             document
               .getElementById(`step${currentStep}`)
@@ -966,13 +964,11 @@
               .querySelector(`.step[data-step="${currentStep}"]`)
               .classList.add("active");
 
-            // Update progress bar
             const progress = (currentStep / totalSteps) * 100;
             document.getElementById(
               "progressFill"
             ).style.width = `${progress}%`;
 
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: "smooth" });
           }
         }
@@ -980,7 +976,6 @@
 
       function prevStep() {
         if (currentStep > 1) {
-          // Hide current step
           document
             .getElementById(`step${currentStep}`)
             .classList.remove("active");
@@ -988,18 +983,15 @@
             .querySelector(`.step[data-step="${currentStep}"]`)
             .classList.remove("active");
 
-          // Show previous step
           currentStep--;
           document.getElementById(`step${currentStep}`).classList.add("active");
           document
             .querySelector(`.step[data-step="${currentStep}"]`)
             .classList.add("active");
 
-          // Update progress bar
           const progress = (currentStep / totalSteps) * 100;
           document.getElementById("progressFill").style.width = `${progress}%`;
 
-          // Scroll to top
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
       }
@@ -1033,15 +1025,12 @@
       }
 
       function goToSupplierApp() {
-        // Save all form data before redirecting
         saveRegistrationData();
         window.location.href = "vendora_supply_dashboard.html";
       }
 
       function saveRegistrationData() {
-        // Collect all form data
         const registrationData = {
-          // Step 2: Business Details
           supplierName: document.getElementById("supplierName").value,
           businessName: document.getElementById("businessName").value,
           phone: document.getElementById("phone").value,
@@ -1051,22 +1040,16 @@
           experience: document.getElementById("experience").value,
           deliveryRange: document.getElementById("deliveryRange").value,
           minOrderValue: document.getElementById("minOrderValue").value,
-
-          // Step 3: Products & Capacity
           products: Array.from(
             document.querySelectorAll('input[name="products"]:checked')
           ).map((cb) => cb.value),
           specificProducts: document.getElementById("specificProducts").value,
           dailyCapacity: document.getElementById("dailyCapacity").value,
           leadTime: document.getElementById("leadTime").value,
-
-          // Step 4: Verification
           gstNumber: document.getElementById("gstNumber").value,
           preferredContact: document.getElementById("preferredContact").value,
-
-          // Additional fields for profile
-          email: "", // Will be added later
-          operatingHours: "", // Will be added later
+          email: "",
+          operatingHours: "",
           description: `${document.getElementById("businessName").value} is a ${
             document.getElementById("businessType").value
           } with ${
@@ -1078,7 +1061,6 @@
             .join(", ")}.`,
         };
 
-        // Save to localStorage
         localStorage.setItem(
           "vendoraSupplierRegistration",
           JSON.stringify(registrationData)

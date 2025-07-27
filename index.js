@@ -110,7 +110,6 @@ window.addEventListener("scroll", function () {
   hero.style.transform = `translateY(${rate}px)`;
 });
 
-// Profile icon, username, and logout logic
 function showProfileNav() {
   const userName = sessionStorage.getItem("userName");
   const profileNav = document.getElementById("profileNav");
